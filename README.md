@@ -1,37 +1,38 @@
-## Welcome to GitHub Pages
+## Characters using Sugarcube 2
+This is a option for handling chracter data when using Sugarcube2 in Twine.
 
-You can use the [editor on GitHub](https://github.com/wizfrk/chracters-sugarcube2/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+Source code:
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/wizfrk/chracters-sugarcube2/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+    */ Initialize your characters with there default values in Story Init /*
+    ::StoryInit
+    <<set $characters = {
+        "Alice" : {
+            name: 'Alice',
+            hp: 100
+        },
+        "John" : {
+            name: 'John',
+            hp: 100
+        }
+    }>>
+    
+    */ You can then use the object as a range for all sorts of interesting stuff /*
+    ::Village
+    Character Status:
+    <<for _character range $characters>>
+        <<print "_character.name has _character.hp">>
+    <</for>>
+    //If you want to use a variable for one character at a time, don't forget that it creates a copy of the Object
+    Who is the active character:
+    <<listbox "$activeChar" autoselect>>
+        <<optionsfrom $characters>>
+    <</listbox>>
+    [[Forest]]
+    
+    ::Forest
+    $activeChar.name is with you.
+    Goldins Attack! $activeChar.name takes 10 damage! <<set $activeChar.hp -= 10>>
+    $activeChar.name now has $activeChar.hp!
+    // So you have to save your changes back to the main object!
+    Saving... <<set $characters[$activeChar.name] to $activeChar>>
+    [[Village]]
